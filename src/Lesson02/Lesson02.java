@@ -5,7 +5,7 @@ public class Lesson02 {
         int [] array_one = {0,0,1,1,0,1,0,0,1};
         int [] array_null = new int [8];
         int [] array_x2 = {1, 5, 3, 2, 11, 4, 5, 2, 4, 8, 9, 1};
-        int [][] arr_square = new int [5][5];
+        int [][] arr_square = new int [7][7];
 
         print(array_one);
         print(array_null);
@@ -14,19 +14,34 @@ public class Lesson02 {
         numbers(array_null);
         arr_min_max(array_x2);
         arr_x2(array_x2);
-    //    diagonals(arr_square);
+        diagonals(arr_square);
+        print_matrix(arr_square);
         print(array_one);
         print(array_null);
         print(array_x2);
     }
-    /*public static void diagonals(int [][] arr) {
+    public static void diagonals(int [][] arr) {
+        int count = 0;
+        int count_rev = 0;
         for (int i = 0; i < arr.length; i ++){
-            arr[0] = 1;
-            for (int j = 0; j < arr.length; j++){
-                if( )
+            for (int j = 0; j < arr[i].length; j++){
+                if(count == j) {
+                    arr[i][j] = 1;
+                }
+                count_rev = j;
             }
+            arr[i][count_rev - count] = 1;
+            count++;
         }
-    }*/
+    }
+    public static void print_matrix (int [][] arr) {
+        for (int i = 0; i < arr.length; i ++) {
+            for (int j = 0; j < arr[i].length; j++) {
+                System.out.print(arr[i][j] + " | ");
+            }
+            System.out.println();
+        }
+    }
     /*int i = 0;
     int j = 0;
         while (i < arr.length){
