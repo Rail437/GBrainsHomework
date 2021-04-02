@@ -18,19 +18,19 @@ public class Animal {
         this.runDistance = (int)x;
     }*/
 
-    private void run(int distance){
+    public void run(int distance){
         if(distance <= runDistance){
             System.out.println(name + " runs " + distance + "meters");
         }else
             System.out.println(name+ " don't run this distance.");
     }
-    private void swim(int distance){
+    public void swim(int distance){
         if(distance <= swimDistance){
             System.out.println(name + " swims " + distance + "meters");
         }else
             System.out.println(name + " don't swim this distance.");
     }
-    private void jump(int distance){
+    public void jump(int distance){
         if(distance <= jumpHight){
             System.out.println(name + " jumps " + distance + "meters");
         }else
