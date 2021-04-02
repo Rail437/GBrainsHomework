@@ -16,7 +16,7 @@ public abstract class Animal {
     }
 
     public void ollInfo(){
-        System.out.println("Kind of animal - " + kind + ", name: " + name);
+        System.out.println(name +" is " + kind);
         System.out.println("Max. run distance: " + runDistance + ", Max. swim distance: " + swimDistance + ", max. jump hight:" + jumpHight + " meters");
     }
     public void run(int distance){
