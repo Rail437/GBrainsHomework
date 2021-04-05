@@ -74,9 +74,21 @@ public class MainClass {
             System.out.println("ERROR: IOExeption.");
         }
     }
+    private static String modPath (String path){
+        char[] mod = path.toCharArray();
+        String pat = "";
+        for (int i = 0; i < path.length(); i++){
+            if (mod[i] == 92){
+                mod[i] = '/';
+            }
+            pat = pat + mod[i];
+        }
+        return pat;
+    }
 
     private static boolean checkWord(String word, String file) {
         try {
+            //modPath(file);
             System.out.println("checking: " + file);
             int count = word.length();
             int tmp;
@@ -114,7 +126,7 @@ public class MainClass {
                         searchFiles(file, word);
                     } else {
                         if (file.isFile()) {
-                            if (checkWord(word, file.getPath()) == true) {
+                            if (checkWord(word, modPath(file.getPath())) == true) {
                                 return true;
                             }
                         }
