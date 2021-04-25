@@ -11,19 +11,20 @@ public class Robot implements Run, Jump {
     }
 
     @Override
-    public void Run(int distanse) {
-        if (distanse <= RunDistanse) {
-            System.out.println(type + " " + name + " runs distanse - " + distanse + "m.");
+    public void Run(Treadmill distanse) {
+        if (distanse.GoToRun() <= RunDistanse) {
+            System.out.println(type + " " + name + " runs distanse - " + distanse.GoToRun() + "m.");
         } else {
-            System.out.println(type + " " + name + " doesn't run " + distanse + "m.");
-        }    }
+            System.out.println(type + " " + name + " doesn't run " + distanse.GoToRun() + "m.");
+        }
+    }
 
     @Override
-    public void Jump(float height) {
-        if (height <= jumpHeight) {
-            System.out.println(type + " " + name + " jumps - " + height + "m.");
+    public void Jump(Wall wall) {
+        if (wall.GoToJump() <= jumpHeight) {
+            System.out.println(type + " " + name + " jumps - " + wall.GoToJump() + "m.");
         } else {
-            System.out.println(type + " " + name + " doesn't jump " + height + "m.");
+            System.out.println(type + " " + name + " doesn't jump " + wall.GoToJump() + "m.");
         }
     }
 }

@@ -8,21 +8,21 @@ public class Main {
         Wall wall = new Wall(2);
 
         Object[] members = {barsik,bob,chappi};
-        /*Object[] barriers = {treadmill.GoToRun(), wall.GoToJump()};
+        Object[] barriers = {treadmill, wall};
 
-       for(int i = 0; i < members.length; i++){
-            System.out.println(members[i]);
-       }
+        for(int i = 0; i < members.length; i++){
+            for (int j = 0; j < barriers.length; j++){
+                members[i].
+            }
+        }
 
-        for (int j = 0; j < barriers.length; j++){
-            barsik.Run(barriers[j]);
-        }*/
 
-        barsik.Run(treadmill.GoToRun());
-        barsik.Jump(wall.GoToJump());
-        bob.Run(treadmill.GoToRun());
-        bob.Jump(wall.GoToJump());
-        chappi.Run(treadmill.GoToRun());
-        chappi.Jump(wall.GoToJump());
+        /*
+        barsik.Run(treadmill);
+        barsik.Jump(wall);
+        bob.Run(treadmill);
+        bob.Jump(wall);
+        chappi.Run(treadmill);
+        chappi.Jump(wall);*/
     }
 }

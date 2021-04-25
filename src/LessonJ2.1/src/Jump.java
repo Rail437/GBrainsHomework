@@ -1,3 +1,3 @@
 public interface Jump {
-    void Jump(float h);
+    void Jump(Wall wall);
 }

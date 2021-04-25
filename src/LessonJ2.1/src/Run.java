@@ -1,3 +1,3 @@
 public interface Run {
-    void Run(int distanse);
+    void Run(Treadmill treadmill);
 }
