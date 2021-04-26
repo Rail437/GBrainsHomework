@@ -8,4 +8,5 @@ public class Treadmill {
     public int GoToRun(){
         return distanse;
     }
+
 }

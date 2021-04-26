@@ -1,4 +1,4 @@
-public class Robot implements Run, Jump {
+public class Robot implements Action {
     private String name = "Default name";
     private String type = "Robot";
     private int RunDistanse = 5000;
@@ -11,20 +11,22 @@ public class Robot implements Run, Jump {
     }
 
     @Override
-    public void Run(Treadmill distanse) {
-        if (distanse.GoToRun() <= RunDistanse) {
-            System.out.println(type + " " + name + " runs distanse - " + distanse.GoToRun() + "m.");
+    public void run(Object distanse) {
+        Treadmill treadmill = (Treadmill) distanse;
+        if (treadmill.GoToRun() <= RunDistanse) {
+            System.out.println(type + " " + name + " runs distanse - " + treadmill.GoToRun() + "m.");
         } else {
-            System.out.println(type + " " + name + " doesn't run " + distanse.GoToRun() + "m.");
+            System.out.println(type + " " + name + " doesn't run " + treadmill.GoToRun() + "m.");
         }
     }
 
     @Override
-    public void Jump(Wall wall) {
-        if (wall.GoToJump() <= jumpHeight) {
-            System.out.println(type + " " + name + " jumps - " + wall.GoToJump() + "m.");
+    public void jump(Object wall) {
+        Wall wall1 = (Wall)wall;
+        if (wall1.GoToJump() <= jumpHeight) {
+            System.out.println(type + " " + name + " jumps - " + wall1.GoToJump() + "m.");
         } else {
-            System.out.println(type + " " + name + " doesn't jump " + wall.GoToJump() + "m.");
+            System.out.println(type + " " + name + " doesn't jump " + wall1.GoToJump() + "m.");
         }
     }
 }
