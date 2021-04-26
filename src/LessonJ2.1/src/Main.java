@@ -15,11 +15,17 @@ public class Main {
 
         Object[] bariers = {treadmill,wall,treadmill};
         for (int i = 0; i < runneds.length; i++) {
+            Boolean stasus = true;
             for (int j = 0; j < bariers.length; j++){
                 if(bariers[j] instanceof Treadmill){
-                    runneds[i].run(bariers[j]);
+                    stasus = (runneds[i].run(bariers[j]));
+                    if(stasus == false){
+                        break;
+                    }
                 }else {
-                    runneds[i].jump(bariers[j]);
+                    stasus = (runneds[i].jump(bariers[j]));
+                    if (stasus == false)
+                        break;
                 }
             }
         }

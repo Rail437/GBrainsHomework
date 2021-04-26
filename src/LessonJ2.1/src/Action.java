@@ -1,6 +1,6 @@
 public interface Action {
 
-    void run(Object Treadmill);
+    boolean run(Object Treadmill);
 
-    void jump(Object wall);
+    boolean jump(Object wall);
 }
