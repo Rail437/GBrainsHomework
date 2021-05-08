@@ -1,0 +1,12 @@
+.dark-gray-background{
+    -fx-background-color: #46474A;
+}
+.scroll-pane-background{
+    -fx-background-color: #3D9200;
+}
+.button-background-color{
+    -fx-background-color: #FF9400;
+}
+.message-background-color{
+    -fx-background-color: #007D1C;
+}
