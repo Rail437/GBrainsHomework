@@ -7,6 +7,8 @@ public class Lesson5 {
         for (int i = 0; i < size; i++) {
             arr[i] = 1;
         }
+        //method1(size, arr);
+        //method2(size, arr);
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -65,6 +67,10 @@ public class Lesson5 {
                 }
             }
         });
+        thread1.start();
+        thread2.start();
+        thread1.join();
+        thread2.join();
         System.arraycopy(a1, 0, arr, 0, h);
         System.arraycopy(a2, 0, arr, h, h);
         long b = System.currentTimeMillis();
