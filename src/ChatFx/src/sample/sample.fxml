@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="450.0"
+      xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <VBox fx:id="textPane" minHeight="-Infinity" minWidth="-Infinity" prefHeight="334.0" prefWidth="398.0" VBox.vgrow="ALWAYS">
+         <children>
+            <SplitPane dividerPositions="0.6978609625668449" prefHeight="336.0" prefWidth="400.0" VBox.vgrow="ALWAYS">
+              <items>
+                <AnchorPane fx:id="messagePane" minHeight="0.0" minWidth="0.0" prefHeight="333.0" prefWidth="290.0">
+                     <children>
+                        <TextArea fx:id="messeges" editable="false" prefHeight="333.0" prefWidth="334.0" />
+                     </children></AnchorPane>
+                <AnchorPane fx:id="nickPane" minHeight="0.0" minWidth="0.0" prefHeight="333.0" prefWidth="117.0">
+                     <children>
+                        <TextArea fx:id="nicks" editable="false" layoutX="2.0" prefHeight="334.0" prefWidth="133.0" />
+                        <Button fx:id="refresh" layoutX="27.0" layoutY="292.0" mnemonicParsing="false" onAction="#refreshList"
+                                prefHeight="26.0" prefWidth="78.0" text=" Refresh list" />
+                        <TextArea fx:id="nickList" editable="false" layoutY="1.0" prefHeight="283.0" prefWidth="134.0" />
+                     </children></AnchorPane>
+              </items>
+            </SplitPane>
+         </children>
+      </VBox>
+      <ToolBar minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="67.0" prefWidth="379.0"
+               VBox.vgrow="ALWAYS">
+        <items>
+          <Button fx:id="sendButton" defaultButton="true" mnemonicParsing="false" onAction="#onClickButton" prefHeight="26.0"
+                  prefWidth="62.0" text="Send" />
+            <TextField fx:id="inputText" alignment="TOP_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="30.0" prefWidth="366.0"
+                       promptText="Enter message">
+               <opaqueInsets>
+                  <Insets left="5.0" right="10.0" />
+               </opaqueInsets>
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <rotationAxis>
+                  <Point3D />
+               </rotationAxis>
+            </TextField>
+        </items>
+      </ToolBar>
+   </children>
+</VBox>
