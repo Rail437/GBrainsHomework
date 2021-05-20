@@ -20,4 +20,6 @@ public class ChatConstants {
     public static final String CONNECT = "/connect";
 
     public static final String DISCONNECT = "/disconnect";
+
+    public static final String PER_TO_PER = "/w";
 }

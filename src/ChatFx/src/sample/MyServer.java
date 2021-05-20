@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class MyServer {
+    public static boolean statusAuthClient = false;
     /**
      * Непосредственно сервер */
 
@@ -26,7 +27,6 @@ public class MyServer {
                 System.out.println("Клиент подключился");
                 new ClientHandler(this, socket);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -62,7 +62,6 @@ public class MyServer {
 
     /**
      * Отправляет сообщение всем пользователям
-     *
      * @param message
      */
     public synchronized void broadcastMessage(String message) {
@@ -84,6 +83,13 @@ public class MyServer {
         client.sendMsg(message);
     }*/
     }
+    public synchronized void messageToPers(String message,  String nickname){
+        for (ClientHandler client : clients) {
+            if(nickname.contains(client.getName())){
+                client.sendMsg(message);
+            }
+        }
+    }
 
     public synchronized void broadcastClients() {
         String clientsMessage = ChatConstants.CLIENTS_LIST +
@@ -99,8 +105,7 @@ public class MyServer {
                 clients.stream()
                         .map(ClientHandler::getName)
                         .collect(Collectors.joining(" "));
-        // /client nick1 nick2 nick3
-        clients.forEach(c-> c.sendList(clientsMessage));
+        clients.forEach(c-> c.refreshList(clientsMessage));
     }
 }
 

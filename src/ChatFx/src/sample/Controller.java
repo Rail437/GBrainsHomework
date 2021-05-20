@@ -12,7 +12,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.*;
 
 
@@ -20,6 +19,7 @@ public class Controller {
     private static Socket socket;
     public static DataInputStream inputStream;
     public static DataOutputStream outputStream;
+    private static boolean OnOffConnect = false;
 
     @FXML
     private TextArea messeges;
@@ -90,9 +90,11 @@ public class Controller {
     @FXML
     private void onClickButton(javafx.event.ActionEvent event) {
         try {
-            if (inputText.getText().equals(ChatConstants.CONNECT)) {
+            if (inputText.getText().equals(ChatConstants.CONNECT) &&
+                !OnOffConnect) {
                 openConnection();                      //Тут подключение к серверу.
                 inputText.setText("");
+                OnOffConnect = true;
             }
             if (inputText.getText().equals(ChatConstants.DISCONNECT)) {
                 ending();                              //Тут отключаемся

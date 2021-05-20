@@ -4,9 +4,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static sample.MyServer.statusAuthClient;
 
 public class ClientHandler {
     private MyServer server;
@@ -38,6 +39,20 @@ public class ClientHandler {
                 }
 
             }).start();
+            Thread checkAuth = new Thread(() -> {
+                    Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (statusAuthClient == false) {
+                        System.out.println("Не авторизованный клиент был отключен за простой.");
+                        closeConnection();
+                    }
+                }
+            }, 120*1000); //Тут задаем время через которое выполняем код выше.
+            });
+            checkAuth.setDaemon(true);
+            checkAuth.start();
         } catch (IOException ex) {
             System.out.println("Проблема при создании клиента");
         }
@@ -59,6 +74,10 @@ public class ClientHandler {
                 server.broadcastClients();
             } else if (messageFromClient.startsWith(ChatConstants.SEND_REFRESH_LIST)) {
                 server.broadcastClientsList();
+            }else if (messageFromClient.startsWith(ChatConstants.PER_TO_PER)) {
+                String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+"))
+                        .skip(1).limit(1).collect(Collectors.joining());
+               server.messageToPers(messageFromClient,splitPersonNick);
             } else {
                 server.broadcastMessage("[" + name + "]: " + messageFromClient);
             }
@@ -80,7 +99,8 @@ public class ClientHandler {
                         name = nick.get();
                         server.subscribe(this);
                         server.broadcastMessage(name + " вошел в чат");
-                        return;
+                        statusAuthClient = true;
+                        return ;
                     } else {
                         sendMsg("Ник уже используется");
                     }
@@ -98,7 +118,7 @@ public class ClientHandler {
             e.printStackTrace();
         }
     }
-    public void sendList(String message) {
+    public void refreshList(String message) {
         try {
             outputStream.writeUTF(message);
         } catch (IOException e) {
