@@ -1,4 +1,4 @@
-public class Orange extends Fruit<Fruit> {
+public class Orange extends Fruit {
     private final float WEIGHT = 1.5f;
 
     public float getWEIGHT(){
