@@ -21,8 +21,8 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
-                sample.Controller.ending();
                 System.exit(0);
+                sample.Controller.ending();
                 event.consume();
             }
         });

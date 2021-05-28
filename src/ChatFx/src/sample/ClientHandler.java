@@ -1,21 +1,27 @@
 package sample;
 
+import sample.EnterWindow.LPWController;
+
+import javax.swing.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
+import java.util.Timer;
 import java.util.stream.Collectors;
 
-import static sample.MyServer.statusAuthClient;
+import static sample.EnterWindow.LPWController.*;
+import static sample.MyServer.*;
 
 public class ClientHandler {
-    private MyServer server;
+    public static MyServer server;
     private Socket socket;
-    private DataInputStream inputStream;
-    private DataOutputStream outputStream;
+    public static DataInputStream inputStream;
+    public static DataOutputStream outputStream;
 
-    private String name;
+
+    public static String name;
 
     public String getName() {
         return name;
@@ -28,6 +34,7 @@ public class ClientHandler {
             this.inputStream = new DataInputStream(socket.getInputStream());
             this.outputStream = new DataOutputStream(socket.getOutputStream());
             this.name = "";
+
             new Thread(() -> {
                 try {
                     authentification();
@@ -74,10 +81,13 @@ public class ClientHandler {
                 server.broadcastClients();
             } else if (messageFromClient.startsWith(ChatConstants.SEND_REFRESH_LIST)) {
                 server.broadcastClientsList();
-            }else if (messageFromClient.startsWith(ChatConstants.PER_TO_PER)) {
+            }else if (messageFromClient.startsWith(ChatConstants.PER_TO_PER)) {  //Отправляем персональное сообщение
                 String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+"))
                         .skip(1).limit(1).collect(Collectors.joining());
-               server.messageToPers(messageFromClient,splitPersonNick);
+                String splitMessage = Arrays.stream(messageFromClient.split("\\s+"))
+                        .skip(2).collect(Collectors.joining());
+                server.messageToPers("Privat chat ["+ name + " & " + splitPersonNick + "] "
+                        + splitMessage,splitPersonNick, name);
             } else {
                 server.broadcastMessage("[" + name + "]: " + messageFromClient);
             }
@@ -89,6 +99,7 @@ public class ClientHandler {
     private void authentification() throws IOException {
         while (true) {
             String message = inputStream.readUTF();
+
             if (message.startsWith(ChatConstants.AUTH_COMMAND)) {
                 String[] parts = message.split("\\s+");
                 Optional<String> nick = server.getAuthService().getNickByLoginAndPass(parts[1], parts[2]);
@@ -96,22 +107,24 @@ public class ClientHandler {
                     //проверим, что такого нет
                     if (!server.isNickBusy(nick.get())) {
                         sendMsg(ChatConstants.AUTH_OK + " " + nick);
+                        statusAuthClient = true;
                         name = nick.get();
                         server.subscribe(this);
                         server.broadcastMessage(name + " вошел в чат");
-                        statusAuthClient = true;
                         return ;
                     } else {
+                        //JOptionPane.showMessageDialog(null, "Ник уже используется");
                         sendMsg("Ник уже используется");
                     }
                 } else {
-                    sendMsg("Неверные логин/пароль");
+                    JOptionPane.showMessageDialog(null, "Неверные логин/пароль");
+                    //sendMsg("Неверные логин/пароль");
                 }
             }
         }
     }
 
-    public void sendMsg(String message) {
+    public static void sendMsg(String message) {
         try {
             outputStream.writeUTF(message);
         } catch (IOException e) {

@@ -83,9 +83,12 @@ public class MyServer {
         client.sendMsg(message);
     }*/
     }
-    public synchronized void messageToPers(String message,  String nickname){
+    public synchronized void messageToPers(String message,  String nickname , String name){
         for (ClientHandler client : clients) {
             if(nickname.contains(client.getName())){
+                client.sendMsg(message);
+            }
+            if(name.contains(client.getName())){
                 client.sendMsg(message);
             }
         }

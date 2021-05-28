@@ -2,8 +2,13 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 
 import javax.swing.*;
@@ -17,9 +22,10 @@ import java.util.stream.*;
 
 public class Controller {
     private static Socket socket;
-    public static DataInputStream inputStream;
+    private static DataInputStream inputStream;
     public static DataOutputStream outputStream;
-    private static boolean OnOffConnect = false;
+    private static boolean openLPW = false;
+    private static boolean Connection = false;
 
     @FXML
     private TextArea messeges;
@@ -27,6 +33,9 @@ public class Controller {
     private TextArea nickList;
     @FXML
     private TextField inputText;
+    @FXML
+    private Button connect;
+
 
 
     @FXML
@@ -91,10 +100,11 @@ public class Controller {
     private void onClickButton(javafx.event.ActionEvent event) {
         try {
             if (inputText.getText().equals(ChatConstants.CONNECT) &&
-                !OnOffConnect) {
+                !Connection) {
                 openConnection();                      //Тут подключение к серверу.
                 inputText.setText("");
-                OnOffConnect = true;
+                //OnOffConnect = true;
+                Connection = true;
             }
             if (inputText.getText().equals(ChatConstants.DISCONNECT)) {
                 ending();                              //Тут отключаемся
@@ -109,6 +119,30 @@ public class Controller {
         }
     }
 
+    @FXML
+    private void onClickConnect(javafx.event.ActionEvent event){
+        if(!Connection){
+            try {
+                openConnection();
+                Connection = true;
+                //OnOffConnect = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void onClickConnect(){
+        if(!Connection){
+            try {
+                openConnection();
+                Connection = true;
+                //OnOffConnect = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     private void sendMessage() {
         if (!inputText.getText().trim().isEmpty()) {
             try {
@@ -123,7 +157,7 @@ public class Controller {
         }
     }
 
-    private void sendMessage(String text) {
+    public static void sendMessage(String text) {
         try {
             outputStream.writeUTF(text);
         } catch (IOException e) {
@@ -147,5 +181,40 @@ public class Controller {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    /*private void onClickConnect(javafx.event.ActionEvent event) {
+        if(!Connection){
+            try {
+                openConnection();
+                Connection = true;
+                //OnOffConnect = true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+*/
+    @FXML
+    void initialize(){
+        connect.setOnAction(event -> {
+            if(!openLPW) {
+                onClickConnect();
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/sample/EnterWindow/EnterWindow.fxml"));
+
+                try {
+                    loader.load();
+                    openLPW = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Parent root = loader.getRoot();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+                stage.setResizable(false);
+            }
+        });
     }
 }
