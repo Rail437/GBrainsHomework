@@ -1,7 +1,5 @@
 package sample;
 
-import sample.EnterWindow.LPWController;
-
 import javax.swing.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -11,7 +9,6 @@ import java.util.*;
 import java.util.Timer;
 import java.util.stream.Collectors;
 
-import static sample.EnterWindow.LPWController.*;
 import static sample.MyServer.*;
 
 public class ClientHandler {
@@ -118,7 +115,7 @@ public class ClientHandler {
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Неверные логин/пароль");
-                    //sendMsg("Неверные логин/пароль");
+                    sendMsg("Неверные логин/пароль");
                 }
             }
         }

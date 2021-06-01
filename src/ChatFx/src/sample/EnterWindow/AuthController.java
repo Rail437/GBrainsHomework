@@ -4,25 +4,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import sample.ChatConstants;
-import sample.ClientHandler;
 import sample.Controller;
-import sample.MyServer;
 
 import javax.swing.*;
-import javax.xml.bind.Unmarshaller;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
-import java.util.Optional;
-
-import static sample.ClientHandler.*;
-import static sample.Controller.*;
 import static sample.MyServer.*;
 
 
-public class LPWController  {
+public class AuthController {
 
     @FXML
     private Pane LPWindow;
