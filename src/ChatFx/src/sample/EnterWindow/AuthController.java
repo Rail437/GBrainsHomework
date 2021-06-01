@@ -8,7 +8,6 @@ import sample.Controller;
 
 import javax.swing.*;
 import java.io.IOException;
-import static sample.MyServer.*;
 
 
 public class AuthController {
@@ -32,14 +31,11 @@ public class AuthController {
                 inputLogin.setText("");
                 inpitPasswotd.setText("");
                 sendMessageLP(message);
-                if(statusAuthClient == true){
-                    closeWindow();
-                }
         });
     }
 
     @FXML
-    private void closeWindow(){
+    public void closeWindow(){
         LPWindow.getScene().getWindow().hide();
     }
 

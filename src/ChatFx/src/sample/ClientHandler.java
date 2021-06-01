@@ -1,5 +1,7 @@
 package sample;
 
+import sample.EnterWindow.AuthController;
+
 import javax.swing.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -108,6 +110,7 @@ public class ClientHandler {
                         name = nick.get();
                         server.subscribe(this);
                         server.broadcastMessage(name + " вошел в чат");
+                        AuthController.closeWindow();
                         return ;
                     } else {
                         //JOptionPane.showMessageDialog(null, "Ник уже используется");
