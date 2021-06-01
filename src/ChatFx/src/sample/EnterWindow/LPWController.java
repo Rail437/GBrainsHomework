@@ -2,6 +2,7 @@ package sample.EnterWindow;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import sample.ChatConstants;
@@ -28,6 +29,9 @@ public class LPWController  {
     private Pane LPWindow;
 
     @FXML
+    private Label ErrorLabel;
+
+    @FXML
     public Button EnterButton;
 
     @FXML
@@ -43,15 +47,34 @@ public class LPWController  {
                 inputLogin.setText("");
                 inpitPasswotd.setText("");
                 sendMessageLP(message);
-                if(statusAuthClient == true){
+                try {
                     closeWindow();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
         });
     }
 
     @FXML
-    private void closeWindow(){
-        LPWindow.getScene().getWindow().hide();
+    private void closeWindow() throws IOException {
+        while (true){
+            String message = ClientHandler.inputStream.readUTF();
+            if (message.startsWith(ChatConstants.AUTH_COMMAND)) {
+                String[] parts = message.split("\\s+");
+                Optional<String> nick = server.getAuthService().getNickByLoginAndPass(parts[1], parts[2]);
+                if (nick.isPresent()) {
+                    //проверим, что такого нет
+                    if (!server.isNickBusy(nick.get())) {
+                        LPWindow.getScene().getWindow().hide();
+                        return ;
+                    } else {
+                        ErrorLabel.setText("Ник уже используется");
+                    }
+                } else {
+                    ErrorLabel.setText("Неверные логин/пароль");
+                }
+            }
+        }
     }
 
     private void sendMessageLP(String text) {

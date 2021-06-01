@@ -1,4 +1,4 @@
-package sample;
+package sample.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ public class BaseAuthService implements AuthService {
         entries.add(new Entry("nick1", "login1", "pass1"));
         entries.add(new Entry("nick2", "login2", "pass2"));
         entries.add(new Entry("nick3", "login3", "pass3"));
-        entries.add(new Entry("nick4", "login4", "pass4"));
     }
 
     @Override

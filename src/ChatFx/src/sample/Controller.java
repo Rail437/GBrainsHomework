@@ -36,9 +36,6 @@ public class Controller {
     @FXML
     private Button connect;
 
-
-
-    @FXML
     public void openConnection() throws IOException {
         socket = new Socket(ChatConstants.HOST, ChatConstants.PORT);
         inputStream = new DataInputStream(socket.getInputStream());
@@ -103,7 +100,6 @@ public class Controller {
                 !Connection) {
                 openConnection();                      //Тут подключение к серверу.
                 inputText.setText("");
-                //OnOffConnect = true;
                 Connection = true;
             }
             if (inputText.getText().equals(ChatConstants.DISCONNECT)) {
@@ -125,7 +121,6 @@ public class Controller {
             try {
                 openConnection();
                 Connection = true;
-                //OnOffConnect = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -137,7 +132,6 @@ public class Controller {
             try {
                 openConnection();
                 Connection = true;
-                //OnOffConnect = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
