@@ -1,7 +1,5 @@
 package sample;
 
-import sample.EnterWindow.AuthController;
-
 import javax.swing.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -15,9 +13,10 @@ import static sample.MyServer.*;
 
 public class ClientHandler {
     public static MyServer server;
-    private Socket socket;
+    public static Socket socket;
     public static DataInputStream inputStream;
     public static DataOutputStream outputStream;
+    public static boolean Connection = false;
 
 
     public static String name;
@@ -80,7 +79,7 @@ public class ClientHandler {
                 server.broadcastClients();
             } else if (messageFromClient.startsWith(ChatConstants.SEND_REFRESH_LIST)) {
                 server.broadcastClientsList();
-            }else if (messageFromClient.startsWith(ChatConstants.PER_TO_PER)) {  //Отправляем персональное сообщение
+            } else if (messageFromClient.startsWith(ChatConstants.PER_TO_PER)) {  //Отправляем персональное сообщение
                 String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+"))
                         .skip(1).limit(1).collect(Collectors.joining());
                 String splitMessage = Arrays.stream(messageFromClient.split("\\s+"))
@@ -98,7 +97,10 @@ public class ClientHandler {
     private void authentification() throws IOException {
         while (true) {
             String message = inputStream.readUTF();
-
+            if (message.startsWith(ChatConstants.REGISTER)) {
+                String[] Registration = message.split("\\s+");
+                server.addUsers(Registration[1], Registration[2], Registration[3]);
+            }
             if (message.startsWith(ChatConstants.AUTH_COMMAND)) {
                 String[] parts = message.split("\\s+");
                 Optional<String> nick = server.getAuthService().getNickByLoginAndPass(parts[1], parts[2]);
@@ -110,7 +112,7 @@ public class ClientHandler {
                         name = nick.get();
                         server.subscribe(this);
                         server.broadcastMessage(name + " вошел в чат");
-                        AuthController.closeWindow();
+                        //AuthController.closeWindow();
                         return ;
                     } else {
                         //JOptionPane.showMessageDialog(null, "Ник уже используется");

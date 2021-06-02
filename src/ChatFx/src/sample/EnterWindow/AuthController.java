@@ -24,7 +24,7 @@ public class AuthController {
     @FXML
     private TextField inputLogin;
 
-    @FXML
+    /*@FXML
     void initialize() {
             EnterButton.setOnAction(event -> {
                 String message = "/auth" + " " + inputLogin.getText() + " " + inpitPasswotd.getText();
@@ -46,8 +46,6 @@ public class AuthController {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Send error occured");
         }
-    }
-
-
+    }*/
 }
 

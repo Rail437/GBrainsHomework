@@ -17,17 +17,16 @@ public class BaseAuthService implements AuthService {
         }
     }
 
-    private final List<Entry> entries;
+    private final List<User> entries;
 
     public BaseAuthService() {
-        entries = new ArrayList<>();
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        entries = databaseHandler.searchForUser();
+        /*entries = new ArrayList<>();
         entries.add(new Entry("nick1", "login1", "pass1"));
         entries.add(new Entry("nick2", "login2", "pass2"));
         entries.add(new Entry("nick3", "login3", "pass3"));
-        entries.add(new Entry("nick4", "login4", "pass4"));
-               /* new Entry("nick2", "login2", "pass2"),
-                new Entry("nick3", "login3", "pass3"),
-                new Entry("nick4", "login4", "pass4")*/
+        entries.add(new Entry("nick4", "login4", "pass4"));*/
     }
 
     @Override
@@ -43,8 +42,8 @@ public class BaseAuthService implements AuthService {
     @Override
     public Optional<String> getNickByLoginAndPass(String login, String pass) {
         return entries.stream()
-                .filter(entry -> entry.login.equals(login) && entry.pass.equals(pass))
-                .map(entry -> entry.nick)
+                .filter(entry -> entry.getLogin().equals(login) && entry.getPassword().equals(pass))
+                .map(entry -> entry.getNick())
                 .findFirst();
        /* for (Entry entry : entries) {
             if (entry.login.equals(login) && entry.pass.equals(pass)) {

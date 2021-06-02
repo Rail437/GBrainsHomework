@@ -14,6 +14,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("FirstWindow/FirstWindow.fxml"));
         primaryStage.setTitle("ChatFX");
         primaryStage.setScene(new Scene(root, 450, 400 ));
         primaryStage.show();

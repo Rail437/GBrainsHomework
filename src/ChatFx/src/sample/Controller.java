@@ -19,13 +19,15 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.stream.*;
 
+import static sample.ClientHandler.Connection;
+
 
 public class Controller {
     private static Socket socket;
     private static DataInputStream inputStream;
     public static DataOutputStream outputStream;
     private static boolean openLPW = false;
-    private static boolean Connection = false;
+
 
     @FXML
     private TextArea messeges;
@@ -36,9 +38,6 @@ public class Controller {
     @FXML
     private Button connect;
 
-
-
-    @FXML
     public void openConnection() throws IOException {
         socket = new Socket(ChatConstants.HOST, ChatConstants.PORT);
         inputStream = new DataInputStream(socket.getInputStream());
@@ -132,17 +131,9 @@ public class Controller {
         }
     }
 
-    private void onClickConnect(){
-        if(!Connection){
-            try {
-                openConnection();
-                Connection = true;
-                //OnOffConnect = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    /**
+     * Вот здесь обработка логина и пароля из полей.
+     */
     private void sendMessage() {
         if (!inputText.getText().trim().isEmpty()) {
             try {
@@ -154,15 +145,6 @@ public class Controller {
                 inputText.setText("");
                 JOptionPane.showMessageDialog(null, "Send error occured");
             }
-        }
-    }
-
-    public static void sendMessage(String text) {
-        try {
-            outputStream.writeUTF(text);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Send error occured");
         }
     }
 
@@ -194,10 +176,7 @@ public class Controller {
         }
     }
 */
-    @FXML
-    void initialize(){
-        connect.setOnAction(event -> {
-            if(!openLPW) {
+            /*if(!openLPW) {
                 onClickConnect();
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(getClass().getResource("/sample/EnterWindow/EnterWindow.fxml"));
@@ -214,7 +193,5 @@ public class Controller {
                 stage.setScene(new Scene(root));
                 stage.show();
                 stage.setResizable(false);
-            }
-        });
-    }
+            }*/
 }

@@ -22,4 +22,16 @@ public class ChatConstants {
     public static final String DISCONNECT = "/disconnect";
 
     public static final String PER_TO_PER = "/w";
+
+    public static final String USER_TABLE = "users";
+
+    public static final String USER_NICK = "nickname";
+
+    public static final String USER_ID = "idusers";
+
+    public static final String USER_LOGIN = "login";
+
+    public static final String USER_PASSWORD = "password";
+
+    public static final String REGISTER = "/reg";
 }
