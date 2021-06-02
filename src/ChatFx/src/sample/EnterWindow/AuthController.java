@@ -4,10 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import sample.Controller;
-
-import javax.swing.*;
-import java.io.IOException;
+import sample.MainWindow.Controller;
+import sample.Meneger.ClientHandler;
 
 
 public class AuthController {
@@ -30,24 +28,14 @@ public class AuthController {
                 String message = "/auth" + " " + inputLogin.getText() + " " + inpitPasswotd.getText();
                 inputLogin.setText("");
                 inpitPasswotd.setText("");
-                sendMessageLP(message);
+                ClientHandler.sendMsg(message);
         });
     }
 
     @FXML
     public void closeWindow(){
+        Controller.openLPW = false;
         LPWindow.getScene().getWindow().hide();
     }
-
-    private void sendMessageLP(String text) {
-        try {
-            Controller.outputStream.writeUTF(text);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Send error occured");
-        }
-    }
-
-
 }
 

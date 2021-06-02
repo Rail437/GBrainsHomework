@@ -1,6 +1,7 @@
-package sample;
+package sample.Meneger;
 
-import sample.EnterWindow.AuthController;
+import sample.FirstWindow.FirstWindowController;
+import sample.Server.MyServer;
 
 import javax.swing.*;
 import java.io.DataInputStream;
@@ -11,16 +12,16 @@ import java.util.*;
 import java.util.Timer;
 import java.util.stream.Collectors;
 
-import static sample.MyServer.*;
-
 public class ClientHandler {
-    public static MyServer server;
-    private Socket socket;
+    private static MyServer server;
+    private static Socket socket;
     public static DataInputStream inputStream;
     public static DataOutputStream outputStream;
+    public static boolean statusAuthClient = false;
 
 
     public static String name;
+    private static boolean Connection = false;
 
     public String getName() {
         return name;
@@ -50,7 +51,7 @@ public class ClientHandler {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (statusAuthClient == false) {
+                    if (!statusAuthClient) {
                         System.out.println("Не авторизованный клиент был отключен за простой.");
                         closeConnection();
                     }
@@ -98,7 +99,6 @@ public class ClientHandler {
     private void authentification() throws IOException {
         while (true) {
             String message = inputStream.readUTF();
-
             if (message.startsWith(ChatConstants.AUTH_COMMAND)) {
                 String[] parts = message.split("\\s+");
                 Optional<String> nick = server.getAuthService().getNickByLoginAndPass(parts[1], parts[2]);
@@ -109,17 +109,66 @@ public class ClientHandler {
                         statusAuthClient = true;
                         name = nick.get();
                         server.subscribe(this);
+                        FirstWindowController.closeWindow();
                         server.broadcastMessage(name + " вошел в чат");
-                        AuthController.closeWindow();
                         return ;
                     } else {
-                        //JOptionPane.showMessageDialog(null, "Ник уже используется");
-                        sendMsg("Ник уже используется");
+                        JOptionPane.showMessageDialog(null, "Ник уже используется");
+                        //sendMsg("Ник уже используется");
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Неверные логин/пароль");
-                    sendMsg("Неверные логин/пароль");
+                    //sendMsg("Неверные логин/пароль");
                 }
+            }
+        }
+    }
+    public static void openConnection() throws IOException {
+        socket = new Socket(ChatConstants.HOST, ChatConstants.PORT);
+        inputStream = new DataInputStream(socket.getInputStream());
+        outputStream = new DataOutputStream(socket.getOutputStream());
+
+        new Thread(() -> {
+            try {
+                //auth
+                while (true) {
+                    String strFromServer = inputStream.readUTF();
+                    if (strFromServer.equals(ChatConstants.AUTH_OK)) {
+                        break;
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }).start();
+    }
+
+    /*public static void closeConnection() {
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }*/
+
+    public static void onClickConnect(){
+        if(!Connection){
+            try {
+                openConnection();
+                Connection = true;
+                //OnOffConnect = true;
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }

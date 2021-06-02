@@ -1,4 +1,4 @@
-package sample;
+package sample.MainWindow;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -13,16 +13,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/sample/FirstWindow/FirstWindow.fxml"));//getResource("sample.fxml"));
         primaryStage.setTitle("ChatFX");
-        primaryStage.setScene(new Scene(root, 450, 400 ));
+        primaryStage.setScene(new Scene(root, 400, 400 ));
         primaryStage.show();
         primaryStage.setResizable(false);
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
                 System.exit(0);
-                sample.Controller.ending();
+                Controller.ending();
                 event.consume();
             }
         });

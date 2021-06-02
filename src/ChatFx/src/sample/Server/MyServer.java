@@ -1,4 +1,9 @@
-package sample;
+package sample.Server;
+
+import sample.Meneger.ChatConstants;
+import sample.Meneger.ClientHandler;
+import sample.Server.AuthService;
+import sample.Server.BaseAuthService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,7 +13,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class MyServer {
-    public static boolean statusAuthClient = false;
     /**
      * Непосредственно сервер */
 

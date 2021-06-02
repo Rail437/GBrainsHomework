@@ -1,4 +1,4 @@
-package sample;
+package sample.Meneger;
 
 public class ChatConstants {
     public static final String HOST = "localhost";

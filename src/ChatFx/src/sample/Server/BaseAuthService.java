@@ -1,4 +1,4 @@
-package sample;
+package sample.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +46,5 @@ public class BaseAuthService implements AuthService {
                 .filter(entry -> entry.login.equals(login) && entry.pass.equals(pass))
                 .map(entry -> entry.nick)
                 .findFirst();
-       /* for (Entry entry : entries) {
-            if (entry.login.equals(login) && entry.pass.equals(pass)) {
-                return entry.nick;
-            }
-        }*/
-        //return null;
     }
 }
