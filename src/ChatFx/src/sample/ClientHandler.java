@@ -20,6 +20,9 @@ public class ClientHandler {
     public String getName() {
         return name;
     }
+    public void setName(String name){
+        this.name = name;
+    }
 
     public ClientHandler(MyServer server, Socket socket) {
         try {

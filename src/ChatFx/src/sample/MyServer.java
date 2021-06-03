@@ -138,11 +138,11 @@ public class MyServer {
         if( login.equals(clientHandler.getName())){
             DatabaseHandler db = new DatabaseHandler();
             db.changeNickname(login, changedLogin);
-
+            clientHandler.setName(changedLogin);
             return;
         }
         sendMsg("Не верно указан ваш логин. \n" +
-                "Для смены логина \n введите сообщение в формате \n" +
+                "Для смены логина\n введите сообщение в формате \n" +
                 "/change login вашлогин новыйлогин");
     }
 }
