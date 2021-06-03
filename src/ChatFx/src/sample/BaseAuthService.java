@@ -1,8 +1,12 @@
 package sample;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static sample.ChatConstants.*;
 
 public class BaseAuthService implements AuthService {
     private class Entry {
@@ -21,11 +25,23 @@ public class BaseAuthService implements AuthService {
 
     public BaseAuthService() {
         entries = new ArrayList<>();
-        entries.add(new Entry("nick1", "login1", "pass1"));
+        DatabaseHandler db = new DatabaseHandler();
+        ResultSet set = db.searchForUserTest();
+        try {
+            while (set.next()){
+                entries.add(new Entry(
+                        set.getString(USER_NICK),
+                        set.getString(USER_LOGIN),
+                        set.getString(USER_PASSWORD)));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        /*entries.add(new Entry("nick1", "login1", "pass1"));
         entries.add(new Entry("nick2", "login2", "pass2"));
         entries.add(new Entry("nick3", "login3", "pass3"));
         entries.add(new Entry("nick4", "login4", "pass4"));
-               /* new Entry("nick2", "login2", "pass2"),
+        */       /* new Entry("nick2", "login2", "pass2"),
                 new Entry("nick3", "login3", "pass3"),
                 new Entry("nick4", "login4", "pass4")*/
     }
