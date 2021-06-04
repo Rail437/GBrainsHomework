@@ -1,5 +1,6 @@
 package sample;
 
+import sample.SaveMessages.MessageHistory;
 import sample.SaveMessages.SavingMessages;
 
 import java.io.DataInputStream;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static sample.MyServer.statusAuthClient;
 
-public class ClientHandler {
+public class ClientHandler implements MessageHistory {
     private MyServer server;
     private Socket socket;
     private DataInputStream inputStream;
@@ -36,11 +37,10 @@ public class ClientHandler {
             new Thread(() -> {
                 try {
                     authentification();
+                    System.out.println("ClientHandler: " + this.getName() + " авторизовался");
                     readMessages();
-                    System.out.println("ClientHandler: " + this.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
-                    System.out.println("При создании ClientHandler проблема");
                 } finally {
                     closeConnection();
                 }
@@ -93,8 +93,10 @@ public class ClientHandler {
                         .skip(1).limit(1).collect(Collectors.joining());
                server.messageToPers(messageFromClient,splitPersonNick, this);
 */
-                String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+")).skip(1).limit(1).collect(Collectors.joining());
-                String splitMessage = Arrays.stream(messageFromClient.split("\\s+")).skip(2).collect(Collectors.joining(" "));
+                String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+"))
+                        .skip(1).limit(1).collect(Collectors.joining());
+                String splitMessage = Arrays.stream(messageFromClient.split("\\s+"))
+                        .skip(2).collect(Collectors.joining(" "));
                 String message = "Privat chat [" + name + " & " + splitPersonNick + "] "
                         + splitMessage;
                 server.messageToPers(message,splitPersonNick, this);
@@ -121,7 +123,8 @@ public class ClientHandler {
                         server.subscribe(this);
                         server.broadcastMessage(name + " вошел в чат");
                         SavingMessages sv = new SavingMessages();
-                        String text = sv.lastHundredLine(name);
+                        String text = sv.lastHundredHistory(name);
+                        //String text = sv.lastHundredLine(name);
                         sendMsg(text);
                         statusAuthClient = true;
                         return ;

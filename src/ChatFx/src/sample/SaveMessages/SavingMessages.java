@@ -1,6 +1,10 @@
 package sample.SaveMessages;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SavingMessages {
 
@@ -19,11 +23,11 @@ public class SavingMessages {
                 e.printStackTrace();
             }
         }
-        String str = text;
-        String sleshn = "\n";
+        String str = text + " \n";
+        //String sleshn = "\n";
         try (FileOutputStream fileOutputStream = new FileOutputStream(messages, true)){
             fileOutputStream.write(str.getBytes());
-            fileOutputStream.write(sleshn.getBytes());
+            //fileOutputStream.write(sleshn.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,6 +42,28 @@ public class SavingMessages {
             fileInputStream.read(bytes);
             String text = new String(bytes);
             return text;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "(>_<)";
+    }
+
+    public String lastHundredHistory(String nick){
+        String path = ("D:\\GBrainsHomework\\src\\ChatFx\\src\\sample\\SaveMessages\\" + nick + ".txt");
+        File file = new File(path);
+        StringBuilder history = new StringBuilder();
+        try{
+            List textlist = Files.lines(Paths.get(path)).map((s) -> "\n" + s).collect(Collectors.toList());
+            System.out.println("Save textList = " + textlist.size());
+            if(textlist.size() > 100){
+                for(int i = textlist.size() - 100; i < textlist.size(); i++){
+                    history.append(textlist.get(i));
+                }
+                return "*****100 последних сообщений:*****" + history;
+            }
+            return "****Последние сообщения:**** \n" + lastHundredLine(nick);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
