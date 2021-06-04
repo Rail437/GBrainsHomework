@@ -6,7 +6,6 @@ import java.util.List;
 import java.sql.ResultSet;
 
 import static sample.ChatConstants.*;
-import static sample.ClientHandler.sendMsg;
 
 public class DatabaseHandler extends Config{
     Connection dbConnection;
@@ -14,12 +13,12 @@ public class DatabaseHandler extends Config{
     public Connection getDbconnection() throws ClassNotFoundException, SQLException{
         String connectionString = "jdbc:mysql://" + dbHost + ":" +
                 dbPort + "/" + dbName;
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver" );
         dbConnection = DriverManager.getConnection(connectionString, dbUser, dbPass);
         return dbConnection;
     }
 
-    public void signUpUser(String nick, String login, String password){
+    public void signUpUser(ClientHandler client, String nick, String login, String password){
 
         String insert = "INSERT INTO " + USER_TABLE + " (" + USER_NICK + "," +
                 USER_LOGIN + "," + USER_PASSWORD + ") " +
@@ -30,7 +29,8 @@ public class DatabaseHandler extends Config{
             preparedStatement.setString(2, login);
             preparedStatement.setString(3, password);
             preparedStatement.executeUpdate();
-            sendMsg("Добавлен клиент с ником: " + nick);
+            client.sendMsg("Добавлен клиент с ником: " + nick);
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -38,14 +38,15 @@ public class DatabaseHandler extends Config{
         }
     }
 
-    public void changeNickname(String nick, String changeNick){
+    public void changeNickname(ClientHandler client,String nick, String changeNick){
         String update = "UPDATE " + USER_TABLE + " SET NICKNAME=" +
                 "'" + changeNick + "'" + " WHERE NICKNAME=" + "'"+ nick + "'";
         System.out.println(update);
         try {
             PreparedStatement statement = getDbconnection().prepareStatement(update);
             statement.executeUpdate();
-            sendMsg("Логин: " + nick + " был изменен на " + changeNick);
+            client.sendMsg("Логин: " + nick + " был изменен на " + changeNick);
+            statement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -67,6 +68,7 @@ public class DatabaseHandler extends Config{
                         resultSet.getString(USER_PASSWORD)
                 ));
             }
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -76,15 +78,33 @@ public class DatabaseHandler extends Config{
     }
 
     public List getNicks(){
-        ResultSet resultSet = null;
         String select = "SELECT * FROM " + USER_TABLE ;
         List listNicks = new ArrayList();
         try {
             PreparedStatement preparedStatement = getDbconnection().prepareStatement(select);
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()){
                 listNicks.add(resultSet.getString(USER_NICK));
             }
+            preparedStatement.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return listNicks;
+    }
+
+    public List getLogin(){
+        String select = "SELECT * FROM " + USER_TABLE ;
+        List listNicks = new ArrayList();
+        try {
+            PreparedStatement preparedStatement = getDbconnection().prepareStatement(select);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                listNicks.add(resultSet.getString(USER_LOGIN));
+            }
+            preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -97,8 +117,10 @@ public class DatabaseHandler extends Config{
         ResultSet resultSet = null;
         String select = "SELECT * FROM " + USER_TABLE ;
         try {
+            System.out.println("Вызвали поиск юзера из базы данных");
             PreparedStatement preparedStatement = getDbconnection().prepareStatement(select);
             resultSet = preparedStatement.executeQuery();
+            //preparedStatement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         } catch (ClassNotFoundException e) {

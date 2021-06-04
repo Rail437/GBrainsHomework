@@ -1,5 +1,7 @@
 package sample;
 
+import sample.SaveMessages.SavingMessages;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,7 +15,7 @@ public class ClientHandler {
     private MyServer server;
     private Socket socket;
     private DataInputStream inputStream;
-    private static DataOutputStream outputStream;
+    private DataOutputStream outputStream;
 
     private String name;
 
@@ -35,8 +37,10 @@ public class ClientHandler {
                 try {
                     authentification();
                     readMessages();
+                    System.out.println("ClientHandler: " + this.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    System.out.println("При создании ClientHandler проблема");
                 } finally {
                     closeConnection();
                 }
@@ -100,7 +104,7 @@ public class ClientHandler {
             String message = inputStream.readUTF();
             if (message.startsWith(ChatConstants.REGISTER)) {
                 String[] Registration = message.split("\\s+");
-                server.addUsers(Registration[1], Registration[2], Registration[3]);
+                server.addUsers(this,Registration[1], Registration[2], Registration[3]);
             }
             if (message.startsWith(ChatConstants.AUTH_COMMAND)) {
                 String[] parts = message.split("\\s+");
@@ -108,10 +112,13 @@ public class ClientHandler {
                 if (nick.isPresent()) {
                     //проверим, что такого нет
                     if (!server.isNickBusy(nick.get())) {
-                        sendMsg(ChatConstants.AUTH_OK + " " + nick);
                         name = nick.get();
+                        sendMsg(ChatConstants.AUTH_OK + " " + name);
                         server.subscribe(this);
                         server.broadcastMessage(name + " вошел в чат");
+                        SavingMessages sv = new SavingMessages();
+                        String text = sv.lastHundredLine(name);
+                        sendMsg(text);
                         statusAuthClient = true;
                         return ;
                     } else {
@@ -124,7 +131,7 @@ public class ClientHandler {
         }
     }
 
-    public static void sendMsg(String message) {
+    public void sendMsg(String message) {
         try {
             outputStream.writeUTF(message);
         } catch (IOException e) {

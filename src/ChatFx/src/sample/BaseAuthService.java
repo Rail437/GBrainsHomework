@@ -34,8 +34,10 @@ public class BaseAuthService implements AuthService {
                         set.getString(USER_LOGIN),
                         set.getString(USER_PASSWORD)));
             }
+            set.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }finally {
         }
         /*entries.add(new Entry("nick1", "login1", "pass1"));
         entries.add(new Entry("nick2", "login2", "pass2"));

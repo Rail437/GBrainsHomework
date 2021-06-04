@@ -17,8 +17,8 @@ import java.util.stream.*;
 
 public class Controller {
     private static Socket socket;
-    public static DataInputStream inputStream;
-    public static DataOutputStream outputStream;
+    private static DataInputStream inputStream;
+    private static DataOutputStream outputStream;
     private static boolean OnOffConnect = false;
 
     @FXML
@@ -123,14 +123,14 @@ public class Controller {
         }
     }
 
-    private void sendMessage(String text) {
+    /*private void sendMessage(String text) {
         try {
             outputStream.writeUTF(text);
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Send error occured");
         }
-    }
+    }*/
 
     protected static void ending() {
         try {

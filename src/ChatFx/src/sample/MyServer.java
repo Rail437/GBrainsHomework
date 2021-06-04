@@ -1,5 +1,7 @@
 package sample;
 
+import sample.SaveMessages.SavingMessages;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.io.IOException;
@@ -7,7 +9,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import static sample.ClientHandler.sendMsg;
 
 public class MyServer {
     public static boolean statusAuthClient = false;
@@ -70,7 +71,12 @@ public class MyServer {
      * @param message
      */
     public synchronized void broadcastMessage(String message) {
-        clients.forEach(client -> sendMsg(message));
+        SavingMessages save = new SavingMessages();
+        clients.forEach(client -> {
+            client.sendMsg(message);
+            save.SaveMessagesToText(client.getName(), message);
+        });
+
     /*for (ClientHandler client : clients) {
         client.sendMsg(message);
     }*/
@@ -79,7 +85,7 @@ public class MyServer {
     public synchronized void broadcastMessageToClients(String message, List<String> nicknames) {
         clients.stream()
                 .filter(c -> nicknames.contains(c.getName()))
-                .forEach(c -> sendMsg(message));
+                .forEach(c ->c.sendMsg(message));
 
     /*for (ClientHandler client : clients) {
         if (!nicknames.contains(client.getName())) {
@@ -91,7 +97,9 @@ public class MyServer {
     public synchronized void messageToPers(String message,  String nickname){
         for (ClientHandler client : clients) {
             if(nickname.contains(client.getName())){
-                sendMsg(message);
+                client.sendMsg(message);
+                SavingMessages save = new SavingMessages();
+                save.SaveMessagesToText(nickname, message);
             }
         }
     }
@@ -103,7 +111,7 @@ public class MyServer {
                         .map(ClientHandler::getName)
                         .collect(Collectors.joining(" "));
         // /client nick1 nick2 nick3
-        clients.forEach(c-> sendMsg(clientsMessage));
+        clients.forEach(c-> c.sendMsg(clientsMessage));
     }
     public synchronized void broadcastClientsList() {
         String clientsMessage = ChatConstants.SEND_REFRESH_LIST + " " +
@@ -123,13 +131,30 @@ public class MyServer {
         }
         return false;
     }
-    public void addUsers(String nick, String login, String password) {
+    private Boolean checkLogin(String login){
+        DatabaseHandler db = new DatabaseHandler();
+        List logins = db.getNicks();
+
+        for (Object log : logins){
+            if(login.equals(log)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addUsers(ClientHandler client,String nick, String login, String password) {
         DatabaseHandler dbHandler = new DatabaseHandler();
         if(checkNicks(nick)){
-            sendMsg("Такой ник занят");
+            client.sendMsg("Такой ник занят");
             return;
-        }else {
-            dbHandler.signUpUser(nick,login,password);
+        }
+        if(checkLogin(login)){
+            client.sendMsg("Такой логин занят");
+            return;
+        }
+        if (!checkLogin(login) && !checkNicks(nick)){
+            dbHandler.signUpUser(client,nick,login,password);
             checkNicks(nick);
         }
     }
@@ -137,11 +162,11 @@ public class MyServer {
     public void changeLogin(ClientHandler clientHandler, String login, String changedLogin) {
         if( login.equals(clientHandler.getName())){
             DatabaseHandler db = new DatabaseHandler();
-            db.changeNickname(login, changedLogin);
+            db.changeNickname(clientHandler,login, changedLogin);
             clientHandler.setName(changedLogin);
             return;
         }
-        sendMsg("Не верно указан ваш логин. \n" +
+        clientHandler.sendMsg("Не верно указан ваш логин. \n" +
                 "Для смены логина\n введите сообщение в формате \n" +
                 "/change login вашлогин новыйлогин");
     }
