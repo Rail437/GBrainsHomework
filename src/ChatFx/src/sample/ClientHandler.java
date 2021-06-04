@@ -83,18 +83,22 @@ public class ClientHandler {
                 String changedLogin = Arrays.stream(messageFromClient.split("\\s+"))
                         .skip(3).limit(1).collect(Collectors.joining());
                 server.changeLogin(this,login , changedLogin);
-            }else if (messageFromClient.startsWith(ChatConstants.CLIENTS_LIST)) {
+            } else if (messageFromClient.startsWith(ChatConstants.CLIENTS_LIST)) {
                 server.broadcastClients();
             } else if (messageFromClient.startsWith(ChatConstants.SEND_REFRESH_LIST)) {
                 server.broadcastClientsList();
             } else if (messageFromClient.startsWith(ChatConstants.PER_TO_PER)) {
+/*
                 String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+"))
                         .skip(1).limit(1).collect(Collectors.joining());
-               server.messageToPers(messageFromClient,splitPersonNick);
-            } else {
-                server.broadcastMessage("[" + name + "]: " + messageFromClient);
+               server.messageToPers(messageFromClient,splitPersonNick, this);
+*/
+                String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+")).skip(1).limit(1).collect(Collectors.joining());
+                String splitMessage = Arrays.stream(messageFromClient.split("\\s+")).skip(2).collect(Collectors.joining(" "));
+                String message = "Privat chat [" + name + " & " + splitPersonNick + "] "
+                        + splitMessage;
+                server.messageToPers(message,splitPersonNick, this);
             }
-
         }
     }
 

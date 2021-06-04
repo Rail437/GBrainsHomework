@@ -94,13 +94,15 @@ public class MyServer {
         client.sendMsg(message);
     }*/
     }
-    public synchronized void messageToPers(String message,  String nickname){
+    public synchronized void messageToPers(String message, String nickname, ClientHandler clientHandler){
+        SavingMessages save = new SavingMessages();
         for (ClientHandler client : clients) {
             if(nickname.contains(client.getName())){
                 client.sendMsg(message);
-                SavingMessages save = new SavingMessages();
                 save.SaveMessagesToText(nickname, message);
             }
+            clientHandler.sendMsg(message);
+            save.SaveMessagesToText(clientHandler.getName(), message);
         }
     }
 
