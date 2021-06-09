@@ -8,6 +8,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import static sample.MyServer.statusAuthClient;
@@ -26,6 +28,7 @@ public class ClientHandler implements MessageHistory {
     public void setName(String name){
         this.name = name;
     }
+    ExecutorService executorService = Executors.newFixedThreadPool(3);
 
     public ClientHandler(MyServer server, Socket socket) {
         try {
@@ -34,7 +37,7 @@ public class ClientHandler implements MessageHistory {
             this.inputStream = new DataInputStream(socket.getInputStream());
             this.outputStream = new DataOutputStream(socket.getOutputStream());
             this.name = "";
-            new Thread(() -> {
+            executorService.execute(() -> {
                 try {
                     authentification();
                     System.out.println("ClientHandler: " + this.getName() + " авторизовался");
@@ -45,8 +48,8 @@ public class ClientHandler implements MessageHistory {
                     closeConnection();
                 }
 
-            }).start();
-            Thread checkAuth = new Thread(() -> {
+            });
+            executorService.execute(() -> {
                     Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
@@ -58,8 +61,6 @@ public class ClientHandler implements MessageHistory {
                 }
             }, 120*1000); //Тут задаем время через которое выполняем код выше.
             });
-            checkAuth.setDaemon(true);
-            checkAuth.start();
         } catch (IOException ex) {
             System.out.println("Проблема при создании клиента");
         }
