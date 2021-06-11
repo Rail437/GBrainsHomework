@@ -14,6 +14,8 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.stream.*;
 
+import static sample.MyServer.executorService;
+
 
 public class Controller {
     private static Socket socket;
@@ -35,7 +37,7 @@ public class Controller {
         inputStream = new DataInputStream(socket.getInputStream());
         outputStream = new DataOutputStream(socket.getOutputStream());
 
-        new Thread(() -> {
+        executorService.execute(() -> {
             try {
                 //auth
                 while (true) {
@@ -66,7 +68,7 @@ public class Controller {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-        }).start();
+        });
     }
 
     public static void closeConnection() {

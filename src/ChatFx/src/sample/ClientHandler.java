@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
+import static sample.MyServer.executorService;
 import static sample.MyServer.statusAuthClient;
 
 public class ClientHandler implements MessageHistory {
@@ -28,8 +29,6 @@ public class ClientHandler implements MessageHistory {
     public void setName(String name){
         this.name = name;
     }
-    ExecutorService executorService = Executors.newFixedThreadPool(3);
-
     public ClientHandler(MyServer server, Socket socket) {
         try {
             this.server = server;

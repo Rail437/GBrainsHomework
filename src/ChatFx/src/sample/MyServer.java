@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 
 public class MyServer {
+    static ExecutorService executorService = Executors.newFixedThreadPool(4);
     public static boolean statusAuthClient = false;
     /**
      * Непосредственно сервер */
