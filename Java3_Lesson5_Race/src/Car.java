@@ -39,10 +39,10 @@ public class Car implements Runnable {
         }
         if(MainClass.carsFinished == 0){
             MainClass.carsFinished++;
-            System.out.println(name + " Finished first and WIN!!!-----");
+            System.out.println(name + " Финишировал первым и выиграл !!!-----");
         }else {
-            System.out.println(name + " Finished!!!");
             MainClass.carsFinished++;
+            System.out.println(name + " Финишировал на позиции " + MainClass.carsFinished + " !!!");
         }
     }
 }
