@@ -4,10 +4,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static sample.ChatConstants.*;
 
 public class DatabaseHandler extends Config{
+    private static final Logger LOGGER = Logger.getLogger(MyServer.class.getName());
     Connection dbConnection;
 
     public Connection getDbconnection() throws ClassNotFoundException, SQLException{
@@ -117,7 +120,7 @@ public class DatabaseHandler extends Config{
         ResultSet resultSet = null;
         String select = "SELECT * FROM " + USER_TABLE ;
         try {
-            System.out.println("Вызвали поиск юзера из базы данных");
+            LOGGER.log(Level.INFO,"Вызвали поиск юзера из базы данных");
             PreparedStatement preparedStatement = getDbconnection().prepareStatement(select);
             resultSet = preparedStatement.executeQuery();
             //preparedStatement.close();

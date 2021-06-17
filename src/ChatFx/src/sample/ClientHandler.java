@@ -1,6 +1,5 @@
 package sample;
 
-import sample.SaveMessages.MessageHistory;
 import sample.SaveMessages.SavingMessages;
 
 import java.io.DataInputStream;
@@ -10,12 +9,15 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static sample.MyServer.executorService;
 import static sample.MyServer.statusAuthClient;
 
-public class ClientHandler implements MessageHistory {
+public class ClientHandler {
+    private static final Logger LOGGER = Logger.getLogger(MyServer.class.getName());
+    static ExecutorService executorService = Executors.newFixedThreadPool(4);
     private MyServer server;
     private Socket socket;
     private DataInputStream inputStream;
@@ -39,7 +41,8 @@ public class ClientHandler implements MessageHistory {
             executorService.execute(() -> {
                 try {
                     authentification();
-                    System.out.println("ClientHandler: " + this.getName() + " авторизовался");
+                    LOGGER.log(Level.INFO,"ClientHandler: " + this.getName() + " авторизовался");
+                    //System.out.println("ClientHandler: " + this.getName() + " авторизовался");
                     readMessages();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -54,21 +57,24 @@ public class ClientHandler implements MessageHistory {
                 @Override
                 public void run() {
                     if (statusAuthClient == false) {
-                        System.out.println("Не авторизованный клиент был отключен за простой.");
+                        //System.out.println("Не авторизованный клиент был отключен за простой.");
+                        LOGGER.log(Level.INFO, "Не авторизованный клиент был отключен за простой.");
                         closeConnection();
                     }
                 }
             }, 120*1000); //Тут задаем время через которое выполняем код выше.
             });
         } catch (IOException ex) {
-            System.out.println("Проблема при создании клиента");
+            //System.out.println("Проблема при создании клиента");
+            LOGGER.log(Level.WARNING,"Проблема при создании клиента");
         }
     }
 
     private void readMessages() throws IOException {
         while (true) {
             String messageFromClient = inputStream.readUTF();
-            System.out.println("от " + name + ": " + messageFromClient);
+            LOGGER.log(Level.INFO,"Сообщение от " + name + ": " + messageFromClient);
+            //System.out.println("от " + name + ": " + messageFromClient);
             if (messageFromClient.equals(ChatConstants.STOP_WORD)) {
                 return;
             } else if (messageFromClient.startsWith(ChatConstants.SEND_TO_LIST)) {
@@ -88,11 +94,6 @@ public class ClientHandler implements MessageHistory {
             } else if (messageFromClient.startsWith(ChatConstants.SEND_REFRESH_LIST)) {
                 server.broadcastClientsList();
             } else if (messageFromClient.startsWith(ChatConstants.PER_TO_PER)) {
-/*
-                String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+"))
-                        .skip(1).limit(1).collect(Collectors.joining());
-               server.messageToPers(messageFromClient,splitPersonNick, this);
-*/
                 String splitPersonNick = Arrays.stream(messageFromClient.split("\\s+"))
                         .skip(1).limit(1).collect(Collectors.joining());
                 String splitMessage = Arrays.stream(messageFromClient.split("\\s+"))
@@ -100,6 +101,9 @@ public class ClientHandler implements MessageHistory {
                 String message = "Privat chat [" + name + " & " + splitPersonNick + "] "
                         + splitMessage;
                 server.messageToPers(message,splitPersonNick, this);
+            }
+            else {
+                server.broadcastMessage(messageFromClient);
             }
         }
     }

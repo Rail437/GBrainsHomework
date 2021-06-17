@@ -5,10 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static sample.ChatConstants.*;
 
 public class BaseAuthService implements AuthService {
+    private static final Logger LOGGER = Logger.getLogger(MyServer.class.getName());
+
     private class Entry {
         private final String nick;
         private final String login;
@@ -50,12 +54,14 @@ public class BaseAuthService implements AuthService {
 
     @Override
     public void start() {
-        System.out.println(this.getClass().getName() +" server started");
+        LOGGER.log(Level.INFO,this.getClass().getName() +" server started");
+        //System.out.println(this.getClass().getName() +" server started");
     }
 
     @Override
     public void stop() {
-        System.out.println(this.getClass().getName() +" server stopped");
+       // System.out.println(this.getClass().getName() +" server stopped");
+        LOGGER.log(Level.INFO,this.getClass().getName() +" server stopped");
     }
 
     @Override

@@ -14,9 +14,6 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.stream.*;
 
-import static sample.MyServer.executorService;
-
-
 public class Controller {
     private static Socket socket;
     private static DataInputStream inputStream;
@@ -37,7 +34,7 @@ public class Controller {
         inputStream = new DataInputStream(socket.getInputStream());
         outputStream = new DataOutputStream(socket.getOutputStream());
 
-        executorService.execute(() -> {
+        ClientHandler.executorService.execute(() -> {
             try {
                 //auth
                 while (true) {
@@ -124,15 +121,6 @@ public class Controller {
             }
         }
     }
-
-    /*private void sendMessage(String text) {
-        try {
-            outputStream.writeUTF(text);
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Send error occured");
-        }
-    }*/
 
     protected static void ending() {
         try {

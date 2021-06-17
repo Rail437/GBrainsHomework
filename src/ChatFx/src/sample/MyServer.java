@@ -3,8 +3,9 @@ package sample;
 import sample.SaveMessages.SavingMessages;
 
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,11 +14,11 @@ import java.util.ArrayList;
 
 
 public class MyServer {
-    static ExecutorService executorService = Executors.newFixedThreadPool(4);
     public static boolean statusAuthClient = false;
     /**
      * Непосредственно сервер */
 
+    private static final Logger LOGGER = Logger.getLogger(MyServer.class.getName());
     private List<ClientHandler> clients;
     private AuthService authService;
     public MyServer() {
@@ -27,9 +28,11 @@ public class MyServer {
             authService.start();
             clients = new ArrayList<>();
             while (true) {
-                System.out.println("Сервер ожидает подключения");
+                LOGGER.log(Level.INFO,"Сервер ожидает подключения");
+                //System.out.println("SOP: Сервер ожидает подключения");
                 Socket socket = server.accept();
-                System.out.println("Клиент подключился");
+                LOGGER.log(Level.INFO,"Клиент подключился");
+                //System.out.println("SOP: Клиент подключился");
                 new ClientHandler(this, socket);
             }
         } catch (IOException e) {
@@ -73,10 +76,10 @@ public class MyServer {
      * @param message
      */
     public synchronized void broadcastMessage(String message) {
-        SavingMessages save = new SavingMessages();
+        SavingMessages saver = new SavingMessages();
         clients.forEach(client -> {
             client.sendMsg(message);
-            save.SaveMessagesToText(client.getName(), message);
+            saver.SaveMessagesToText(client.getName(), message);
         });
 
     /*for (ClientHandler client : clients) {
@@ -84,18 +87,6 @@ public class MyServer {
     }*/
     }
 
-    public synchronized void broadcastMessageToClients(String message, List<String> nicknames) {
-        clients.stream()
-                .filter(c -> nicknames.contains(c.getName()))
-                .forEach(c ->c.sendMsg(message));
-
-    /*for (ClientHandler client : clients) {
-        if (!nicknames.contains(client.getName())) {
-          continue;
-        }
-        client.sendMsg(message);
-    }*/
-    }
     public synchronized void messageToPers(String message, String nickname, ClientHandler clientHandler){
         SavingMessages save = new SavingMessages();
         for (ClientHandler client : clients) {
@@ -103,9 +94,9 @@ public class MyServer {
                 client.sendMsg(message);
                 save.SaveMessagesToText(nickname, message);
             }
-            clientHandler.sendMsg(message);
-            save.SaveMessagesToText(clientHandler.getName(), message);
         }
+        clientHandler.sendMsg(message);
+        save.SaveMessagesToText(clientHandler.getName(), message);
     }
 
     public synchronized void broadcastClients() {

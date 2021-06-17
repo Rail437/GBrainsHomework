@@ -10,10 +10,10 @@ public class SavingMessages {
 
 
     public void SaveMessagesToText(String nick, String text) {
-        File dir = new File("D:\\GBrainsHomework\\src\\ChatFx\\src\\sample\\SaveMessages");
+        File dir = new File("src\\sample\\SaveMessages");
         String textPath = nick + ".txt";
         if(!dir.exists()) {
-            dir.mkdirs();
+            dir.mkdir();
         }
         File messages = new File(dir, textPath);
         if(!messages.exists()){
@@ -35,7 +35,7 @@ public class SavingMessages {
 
     public String lastHundredLine(String nick){
         String path = (nick + ".txt");
-        File file = new File("D:\\GBrainsHomework\\src\\ChatFx\\src\\sample\\SaveMessages\\" + path);
+        File file = new File("src\\sample\\SaveMessages\\" + path);
         //try(FileInputStream fileInputStream = new FileInputStream(file)) {
         try(FileInputStream fileInputStream = new FileInputStream(file)) {
             byte[] bytes = new byte[2048];
@@ -51,17 +51,17 @@ public class SavingMessages {
     }
 
     public String lastHundredHistory(String nick){
-        String path = ("D:\\GBrainsHomework\\src\\ChatFx\\src\\sample\\SaveMessages\\" + nick + ".txt");
+        String path = ("src\\sample\\SaveMessages\\" + nick + ".txt");
         File file = new File(path);
         StringBuilder history = new StringBuilder();
         try{
             List textlist = Files.lines(Paths.get(path)).map((s) -> "\n" + s).collect(Collectors.toList());
-            System.out.println("Save textList = " + textlist.size());
+            //System.out.println("Save textList = " + textlist.size());
             if(textlist.size() > 100){
                 for(int i = textlist.size() - 100; i < textlist.size(); i++){
                     history.append(textlist.get(i));
                 }
-                return "*****100 последних сообщений:*****" + history;
+                return "*****100 последних сообщений:***** \n" + history;
             }
             return "****Последние сообщения:**** \n" + lastHundredLine(nick);
         } catch (FileNotFoundException e) {
