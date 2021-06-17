@@ -4,7 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-
+import sample.Server.ClientHandler;
+import sample.Server.ChatConstants;
 
 import javax.swing.*;
 import java.io.DataInputStream;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.stream.*;
-
 public class Controller {
     private static Socket socket;
     private static DataInputStream inputStream;
@@ -21,7 +21,7 @@ public class Controller {
     private static boolean OnOffConnect = false;
 
     @FXML
-    private TextArea messeges;
+    private TextArea messages;
     @FXML
     private TextArea nickList;
     @FXML
@@ -49,8 +49,8 @@ public class Controller {
                         this.nickList.appendText(str);
                         continue;
                     }
-                    this.messeges.appendText(strFromServer);
-                    this.messeges.appendText("\n");
+                    this.messages.appendText(strFromServer);
+                    this.messages.appendText("\n");
                 }
                 //read
                 while (true) {
@@ -59,8 +59,8 @@ public class Controller {
                     if (strFromServer.equals(ChatConstants.STOP_WORD)) {
                         break;
                     }
-                    this.messeges.appendText(strFromServer);
-                    this.messeges.appendText("\n");
+                    this.messages.appendText(strFromServer);
+                    this.messages.appendText("\n");
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();

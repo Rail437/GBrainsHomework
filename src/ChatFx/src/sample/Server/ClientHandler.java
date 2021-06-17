@@ -1,5 +1,9 @@
-package sample;
+package sample.Server;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+import sample.Server.ChatConstants;
 import sample.SaveMessages.SavingMessages;
 
 import java.io.DataInputStream;
@@ -9,15 +13,14 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import static sample.MyServer.statusAuthClient;
+import static sample.Server.MyServer.statusAuthClient;
 
 public class ClientHandler {
-    private static final Logger LOGGER = Logger.getLogger(MyServer.class.getName());
-    static ExecutorService executorService = Executors.newFixedThreadPool(4);
+
+    private static final Logger LOGGER = LogManager.getLogger(ClientHandler.class);
+    public static ExecutorService executorService = Executors.newFixedThreadPool(4);
     private MyServer server;
     private Socket socket;
     private DataInputStream inputStream;
@@ -41,7 +44,7 @@ public class ClientHandler {
             executorService.execute(() -> {
                 try {
                     authentification();
-                    LOGGER.log(Level.INFO,"ClientHandler: " + this.getName() + " авторизовался");
+                    LOGGER.info("ClientHandler: " + this.getName() + " авторизовался");
                     //System.out.println("ClientHandler: " + this.getName() + " авторизовался");
                     readMessages();
                 } catch (IOException e) {
@@ -58,7 +61,7 @@ public class ClientHandler {
                 public void run() {
                     if (statusAuthClient == false) {
                         //System.out.println("Не авторизованный клиент был отключен за простой.");
-                        LOGGER.log(Level.INFO, "Не авторизованный клиент был отключен за простой.");
+                        LOGGER.info( "Не авторизованный клиент был отключен за простой.");
                         closeConnection();
                     }
                 }
@@ -66,7 +69,7 @@ public class ClientHandler {
             });
         } catch (IOException ex) {
             //System.out.println("Проблема при создании клиента");
-            LOGGER.log(Level.WARNING,"Проблема при создании клиента");
+            LOGGER.warn("Проблема при создании клиента");
         }
     }
 
@@ -125,6 +128,7 @@ public class ClientHandler {
                         name = nick.get();
                         sendMsg(ChatConstants.AUTH_OK + " " + name);
                         server.subscribe(this);
+                        LOGGER.log(Level.INFO, name + " вошел в чат");
                         server.broadcastMessage(name + " вошел в чат");
                         SavingMessages sv = new SavingMessages();
                         String text = sv.lastHundredHistory(name);
@@ -136,7 +140,8 @@ public class ClientHandler {
                         sendMsg("Ник уже используется");
                     }
                 } else {
-                    sendMsg("Неверные логин/пароль");
+                    LOGGER.log(Level.INFO, "Не удачная попытка ввода логина/пароля");
+                    sendMsg("Неверный логин или пароль");
                 }
             }
         }

@@ -1,7 +1,6 @@
-package sample;
+package sample.Server;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import org.apache.log4j.PropertyConfigurator;
 
 public class ServerApp {
     public static void main(String[] args) {

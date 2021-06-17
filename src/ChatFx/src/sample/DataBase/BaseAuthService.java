@@ -1,17 +1,19 @@
-package sample;
+package sample.DataBase;
+
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import static sample.ChatConstants.*;
+import static sample.Server.ChatConstants.*;
 
 public class BaseAuthService implements AuthService {
-    private static final Logger LOGGER = Logger.getLogger(MyServer.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(BaseAuthService.class);
+
 
     private class Entry {
         private final String nick;
@@ -54,14 +56,14 @@ public class BaseAuthService implements AuthService {
 
     @Override
     public void start() {
-        LOGGER.log(Level.INFO,this.getClass().getName() +" server started");
+        LOGGER.info(this.getClass().getName() +" server started");
         //System.out.println(this.getClass().getName() +" server started");
     }
 
     @Override
     public void stop() {
        // System.out.println(this.getClass().getName() +" server stopped");
-        LOGGER.log(Level.INFO,this.getClass().getName() +" server stopped");
+        LOGGER.info(this.getClass().getName() +" server stopped");
     }
 
     @Override

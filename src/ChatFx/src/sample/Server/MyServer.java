@@ -1,11 +1,16 @@
-package sample;
+package sample.Server;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
+import sample.*;
+import sample.DataBase.AuthService;
+import sample.DataBase.BaseAuthService;
+import sample.DataBase.DatabaseHandler;
 import sample.SaveMessages.SavingMessages;
 
 import java.util.List;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -15,10 +20,7 @@ import java.util.ArrayList;
 
 public class MyServer {
     public static boolean statusAuthClient = false;
-    /**
-     * Непосредственно сервер */
-
-    private static final Logger LOGGER = Logger.getLogger(MyServer.class.getName());
+    private static final Logger LOGGER = LogManager.getLogger(MyServer.class); //Что ему не нравится????
     private List<ClientHandler> clients;
     private AuthService authService;
     public MyServer() {
@@ -28,11 +30,11 @@ public class MyServer {
             authService.start();
             clients = new ArrayList<>();
             while (true) {
-                LOGGER.log(Level.INFO,"Сервер ожидает подключения");
-                //System.out.println("SOP: Сервер ожидает подключения");
+                LOGGER.warn("Сервер ожидает подключения");
+                System.out.println("SOP: Сервер ожидает подключения");
                 Socket socket = server.accept();
-                LOGGER.log(Level.INFO,"Клиент подключился");
-                //System.out.println("SOP: Клиент подключился");
+                LOGGER.warn("Клиент подключился");
+                System.out.println("SOP: Клиент подключился");
                 new ClientHandler(this, socket);
             }
         } catch (IOException e) {

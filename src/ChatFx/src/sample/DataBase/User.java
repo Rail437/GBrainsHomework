@@ -1,4 +1,4 @@
-package sample;
+package sample.DataBase;
 
 public class User {
     private String nick;

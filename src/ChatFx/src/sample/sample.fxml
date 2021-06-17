@@ -21,7 +21,7 @@
               <items>
                 <AnchorPane fx:id="messagePane" minHeight="0.0" minWidth="0.0" prefHeight="333.0" prefWidth="290.0">
                      <children>
-                        <TextArea fx:id="messeges" editable="false" prefHeight="333.0" prefWidth="450.0" />
+                        <TextArea fx:id="messages" editable="false" prefHeight="333.0" prefWidth="450.0" />
                      </children></AnchorPane>
                 <AnchorPane fx:id="nickPane" minHeight="0.0" minWidth="0.0" prefHeight="333.0" prefWidth="117.0">
                      <children>

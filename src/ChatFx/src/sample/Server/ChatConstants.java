@@ -1,4 +1,4 @@
-package sample;
+package sample.Server;
 
 public class ChatConstants {
     public static final String HOST = "localhost";
