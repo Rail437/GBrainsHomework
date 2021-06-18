@@ -14,8 +14,8 @@ import java.util.Optional;
 import static sample.Server.ChatConstants.*;
 
 public class BaseAuthService implements AuthService {
-    //private static final Logger LOGGER = LogManager.getLogger(BaseAuthService.class);
-    private static final com.sun.org.slf4j.internal.Logger LOGGER = LoggerFactory.getLogger(MyServer.class);
+    private static final Logger LOGGER = LogManager.getLogger(BaseAuthService.class);
+    //private static final com.sun.org.slf4j.internal.Logger LOGGER = LoggerFactory.getLogger(MyServer.class);
 
 
 
@@ -61,7 +61,7 @@ public class BaseAuthService implements AuthService {
     @Override
     public void start() {
         //LOGGER.warn(this.getClass().getName() + " server started");
-        LOGGER.warn("Server started");
+        LOGGER.info("Server started");
         //System.out.println(this.getClass().getName() +" server started");
     }
 

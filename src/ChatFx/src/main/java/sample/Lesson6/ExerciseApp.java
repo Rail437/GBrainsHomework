@@ -5,16 +5,16 @@ import java.util.List;
 
 public class ExerciseApp {
     public static void main(String[] args) {
-        int[] box = {2,4,34,5,6,7,8,9,99,};
+        /*int[] box = {2,4,34,5,6,7,8,9,99,};
         int[] buff = new int[0];
         int[] modbox = methodOne(box);
         for (int i = 0; i < modbox.length ; i++) {
             System.out.print(modbox[i]);
         }
         System.out.println();
-        System.out.println(checkNumbers(buff));
+        System.out.println(checkNumbers(buff));*/
     }
-    public static int[] methodOne(int[] numbers){
+    public int[] methodOne(int[] numbers){
         int count = 0;
         int index = 0;
         for (int i = 0; i < numbers.length; i++) {
@@ -42,7 +42,7 @@ public class ExerciseApp {
         return result;
     }
 
-    public static boolean checkNumbers(int[] numbers){
+    public boolean checkNumbers(int[] numbers){
         for (int i = 0; i < numbers.length ; i++) {
             if (numbers[i] == 1 || numbers[i] == 4){
                 return true;
