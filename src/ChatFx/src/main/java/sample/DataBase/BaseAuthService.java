@@ -1,7 +1,9 @@
 package sample.DataBase;
 
+import com.sun.org.slf4j.internal.LoggerFactory;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import sample.Server.MyServer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,6 +15,8 @@ import static sample.Server.ChatConstants.*;
 
 public class BaseAuthService implements AuthService {
     private static final Logger LOGGER = LogManager.getLogger(BaseAuthService.class);
+    //private static final com.sun.org.slf4j.internal.Logger LOGGER = LoggerFactory.getLogger(MyServer.class);
+
 
 
     private class Entry {
@@ -56,14 +60,15 @@ public class BaseAuthService implements AuthService {
 
     @Override
     public void start() {
-        LOGGER.info(this.getClass().getName() +" server started");
+        //LOGGER.warn(this.getClass().getName() + " server started");
+        LOGGER.info("Server started");
         //System.out.println(this.getClass().getName() +" server started");
     }
 
     @Override
     public void stop() {
        // System.out.println(this.getClass().getName() +" server stopped");
-        LOGGER.info(this.getClass().getName() +" server stopped");
+        LOGGER.warn(this.getClass().getName() +" server stopped");
     }
 
     @Override

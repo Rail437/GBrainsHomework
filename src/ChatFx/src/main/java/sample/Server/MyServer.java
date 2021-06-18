@@ -1,9 +1,8 @@
 package sample.Server;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import org.apache.log4j.LogManager;
-import sample.*;
+import org.apache.log4j.Logger;
 import sample.DataBase.AuthService;
 import sample.DataBase.BaseAuthService;
 import sample.DataBase.DatabaseHandler;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 
 public class MyServer {
     public static boolean statusAuthClient = false;
+    //private static final Logger LOGGER = LoggerFactory.getLogger(MyServer.class);
     private static final Logger LOGGER = LogManager.getLogger(MyServer.class); //Что ему не нравится????
     private List<ClientHandler> clients;
     private AuthService authService;
@@ -30,10 +30,10 @@ public class MyServer {
             authService.start();
             clients = new ArrayList<>();
             while (true) {
-                LOGGER.warn("Сервер ожидает подключения");
+                LOGGER.info("Сервер ожидает подключения");
                 System.out.println("SOP: Сервер ожидает подключения");
                 Socket socket = server.accept();
-                LOGGER.warn("Клиент подключился");
+                LOGGER.info("Клиент подключился");
                 System.out.println("SOP: Клиент подключился");
                 new ClientHandler(this, socket);
             }

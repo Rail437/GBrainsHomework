@@ -1,5 +1,7 @@
 package sample.DataBase;
 
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import org.apache.log4j.LogManager;
 import sample.Server.ClientHandler;
 import sample.Server.MyServer;
@@ -12,7 +14,9 @@ import java.sql.ResultSet;
 import static sample.Server.ChatConstants.*;
 
 public class DatabaseHandler extends Config {
-    private static final org.apache.log4j.Logger LOGGER = LogManager.getLogger(MyServer.class);
+    //private static final org.apache.log4j.Logger LOGGER = LogManager.getLogger(MyServer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyServer.class);
+
     Connection dbConnection;
 
     public Connection getDbconnection() throws ClassNotFoundException, SQLException{
@@ -122,7 +126,7 @@ public class DatabaseHandler extends Config {
         ResultSet resultSet = null;
         String select = "SELECT * FROM " + USER_TABLE ;
         try {
-            LOGGER.info("Вызвали поиск юзера из базы данных");
+            LOGGER.trace("Вызвали поиск юзера из базы данных");
             PreparedStatement preparedStatement = getDbconnection().prepareStatement(select);
             resultSet = preparedStatement.executeQuery();
             //preparedStatement.close();
