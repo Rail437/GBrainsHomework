@@ -1,9 +1,7 @@
 package sample.Server;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
-import org.apache.log4j.LogManager;
-import sample.*;
+import com.sun.org.slf4j.internal.Logger;
+import com.sun.org.slf4j.internal.LoggerFactory;
 import sample.DataBase.AuthService;
 import sample.DataBase.BaseAuthService;
 import sample.DataBase.DatabaseHandler;
@@ -20,7 +18,8 @@ import java.util.ArrayList;
 
 public class MyServer {
     public static boolean statusAuthClient = false;
-    private static final Logger LOGGER = LogManager.getLogger(MyServer.class); //Что ему не нравится????
+    private static final Logger LOGGER = LoggerFactory.getLogger(MyServer.class);
+    //private static final Logger LOGGER = LogManager.getLogger(MyServer.class); //Что ему не нравится????
     private List<ClientHandler> clients;
     private AuthService authService;
     public MyServer() {
